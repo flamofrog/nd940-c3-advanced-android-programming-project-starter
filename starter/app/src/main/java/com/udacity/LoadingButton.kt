@@ -1,7 +1,5 @@
 package com.udacity
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
@@ -30,11 +28,11 @@ class LoadingButton @JvmOverloads constructor(
     private var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
         when (buttonState) {
             ButtonState.Clicked -> {
-                buttonText = context.getString(R.string.loading_button_text)
                 buttonState = ButtonState.Loading
             }
             ButtonState.Loading -> {
                 beginAnimation()
+                buttonText = context.getString(R.string.loading_button_text)
             }
             ButtonState.Completed -> {
                 stopAnimation()
@@ -57,6 +55,10 @@ class LoadingButton @JvmOverloads constructor(
         if (buttonState == ButtonState.Completed) buttonState = ButtonState.Clicked
     }
 
+    fun downloadComplete() {
+        if (buttonState == ButtonState.Loading) buttonState = ButtonState.Completed
+    }
+
     var animationProgress = 0F
 
     private var loadingBackgroundWidth: Float = 0F
@@ -67,14 +69,8 @@ class LoadingButton @JvmOverloads constructor(
             .addUpdateListener {
                 loadingBackgroundWidth = (it.animatedValue as Float).times(widthSize.toFloat())
                 loadingCircleArc = (it.animatedValue as Float).times(365F)
-                Log.d(TAG, "Animator Update Listener: $loadingBackgroundWidth")
                 invalidate()
             }
-        valueAnimator.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animator: Animator?) {
-                buttonState = ButtonState.Completed
-            }
-        })
         valueAnimator.start()
     }
 
