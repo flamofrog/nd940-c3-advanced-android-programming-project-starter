@@ -10,12 +10,14 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
         setSupportActionBar(toolbar)
-
         prepareFragment()
     }
 
     private fun prepareFragment() {
         tv_filename_content.text = intent.getStringExtra(DOWNLOADED_FILE).toString()
+        button_ok.setOnClickListener {
+            finish()
+        }
         tv_status_content.apply {
             val status = intent.getStringExtra(DOWNLOAD_STATUS).toString()
             if (status == getString(R.string.download_success)) setTextColor(getColor(R.color.green))
