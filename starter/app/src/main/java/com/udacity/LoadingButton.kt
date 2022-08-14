@@ -6,7 +6,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import kotlin.properties.Delegates
 
@@ -20,7 +19,10 @@ class LoadingButton @JvmOverloads constructor(
 
     private var circleSize = 0F
 
-    private lateinit var buttonText: String
+    private lateinit var downloadText: String
+    private var buttonText: String
+    private var backgroundColour: Int
+    private var textColour: Int
 
     private val valueAnimator = ValueAnimator.ofFloat(0F, 1F)
         .setDuration(5000)
@@ -36,7 +38,7 @@ class LoadingButton @JvmOverloads constructor(
             }
             ButtonState.Completed -> {
                 stopAnimation()
-                buttonText = context.getString(R.string.download_button_text)
+                buttonText = downloadText
             }
         }
         invalidate()
@@ -48,7 +50,20 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     init {
-        buttonText = context.getString(R.string.download_button_text)
+        context.obtainStyledAttributes(attrs, R.styleable.LoadingButton).apply {
+            downloadText = getString(R.styleable.LoadingButton_buttonText)
+                ?: context.getString(R.string.download_button_text)
+            backgroundColour = getColor(
+                R.styleable.LoadingButton_backgroundColour,
+                context.getColor(R.color.colorPrimary)
+            )
+            textColour = getColor(
+                R.styleable.LoadingButton_textColour,
+                context.getColor(R.color.colorPrimary)
+            )
+        }.recycle()
+
+        buttonText = downloadText
     }
 
     fun buttonClicked() {
@@ -96,12 +111,12 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     private fun Canvas.drawBackground() {
-        paint.color = context.getColor(R.color.colorPrimary)
+        paint.color = backgroundColour
         this.drawRect(0F, 0F, widthSize.toFloat(), heightSize.toFloat(), paint)
     }
 
     private fun Canvas.drawTitle() {
-        paint.color = context.getColor(R.color.white)
+        paint.color = textColour
         this.drawText(
             buttonText,
             (width) / 2.8F,

@@ -50,9 +50,14 @@
         android:layout_height="60dp"
         android:layout_margin="20dp"
         android:layout_marginTop="225dp"
+
+        app:backgroundColour="@color/colorPrimary"
+        app:buttonText="@string/download_button_text"
         app:layout_constraintBottom_toBottomOf="parent"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/download_options_radio_group" />
+        app:layout_constraintTop_toBottomOf="@+id/download_options_radio_group"
+        app:textColour="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
